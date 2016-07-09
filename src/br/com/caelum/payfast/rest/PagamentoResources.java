@@ -1,7 +1,8 @@
 package br.com.caelum.payfast.rest;
 
 import java.math.BigDecimal;
-import java.net.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -48,6 +50,8 @@ public class PagamentoResources {
 		pagamento.setId(idPagamento++);
 		pagamento.setValor(transacao.getValor());
 		
+		pagamento.comStatusCriado();
+		
 		repositorio.put(pagamento.getId(), pagamento);
 		System.out.println("PAGAMENTO CRIADO " + pagamento);
 		
@@ -70,6 +74,16 @@ public class PagamentoResources {
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.build();
 		
+	}
+	
+	@PUT
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Pagamento confirmarPagamento(@PathParam("id") Integer pagamentoId) {
+		Pagamento pagamento = repositorio.get(pagamentoId);
+		pagamento.comStatusConfirmado();
+		System.out.println("Pagamento confirmado: " + pagamento);
+		return pagamento;
 	}
 	
 }
