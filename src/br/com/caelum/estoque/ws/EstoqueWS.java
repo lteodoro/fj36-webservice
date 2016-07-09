@@ -7,9 +7,11 @@ import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 
-@WebService
+@WebService (targetNamespace="http://caelum.com.br/estoque/v1")
 @Stateless
 public class EstoqueWS {
 
@@ -24,8 +26,16 @@ public class EstoqueWS {
 		repositorio.put("WEB", new ItemEstoque("WEB", 1));
 	}
 	
-	@WebMethod
-	public List<ItemEstoque> getQuantidade(List<String> codigos) {
+	@WebMethod(operationName="ItensPeloCodigo")
+	@WebResult(name="ItemEstoque")
+	public List<ItemEstoque> getQuantidade(
+			@WebParam(name="codigo") List<String> codigos,
+			@WebParam(name="tokenUsuario", header=true) String token) {
+		
+		if (token == null || !token.equals("TOKEN123")) {
+			throw new AutorizacaoException("Nao autorizado"); 
+		}
+		
 		List<ItemEstoque> itens = new ArrayList<ItemEstoque>();
 		
 		if(codigos == null || codigos.isEmpty()) {
