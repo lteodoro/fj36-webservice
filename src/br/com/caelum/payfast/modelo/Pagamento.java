@@ -3,9 +3,13 @@ package br.com.caelum.payfast.modelo;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Pagamento {
 
 	private static final String URI = "/pagamentos/";
@@ -18,6 +22,7 @@ public class Pagamento {
 	private static final String STATUS_CONFIRMADO = "CONFIRMADO";
 	private static final String STATUS_CANCELADO = "CANCELADO";
 	
+	@XmlAttribute
 	private Integer id;
 	private String status;
 	private BigDecimal valor;
